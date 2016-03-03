@@ -17,10 +17,13 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     public Keyboard keyboard;
     public KeyboardView keyboardView;
-    private EditText currentMessage;
+    public EditText currentMessage;
+    public ArrayList<String> words;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Install the key handler
         keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
+
+        words = new ArrayList<>();
 
         currentMessage = (EditText)findViewById(R.id.currentMessageEditText);
     }
@@ -91,7 +96,12 @@ public class MainActivity extends AppCompatActivity {
             } else if (primaryCode == 13) {
                 currentMessage.append("\n");
 
-            } else {
+            }/* else if (primaryCode == 32) {
+
+                String spaceSplit = "";
+
+
+            }*/ else {
                 char c = (char) primaryCode;
                 //Log.i("key pressed: ", String.valueOf(c));
                 currentMessage.append(String.valueOf(c));
