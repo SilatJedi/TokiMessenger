@@ -1,15 +1,26 @@
 package com.silatsakti.tokimessenger;
 
+import android.app.Activity;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
+    public Keyboard keyboard;
+    public KeyboardView keyboardView;
+    private EditText currentMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +29,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Create the Keyboard
+        keyboard = new Keyboard(this,R.xml.latinkb);
+
+        // Lookup the KeyboardView
+        keyboardView= (KeyboardView)findViewById(R.id.keyboardview);
+
+        // Attach the keyboard to the view
+        keyboardView.setKeyboard(keyboard);
+
+        // Do not show the preview balloons
+        keyboardView.setPreviewEnabled(false);
+
+        // Install the key handler
+        keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
+
+        currentMessage = (EditText)findViewById(R.id.currentMessageEditText);
     }
 
     @Override
@@ -41,4 +68,55 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void openKeyboard(View v)
+    {
+        keyboardView.setVisibility(View.VISIBLE);
+        keyboardView.setEnabled(true);
+        if( v!=null)((InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private KeyboardView.OnKeyboardActionListener onKeyboardActionListener = new KeyboardView.OnKeyboardActionListener() {
+        @Override public void onKey(int primaryCode, int[] keyCodes)
+        {
+            if (primaryCode == -5) {
+                if ( String.valueOf(currentMessage.getText().toString()).length() == 0) {
+                    currentMessage.setText("");
+                } else {
+                    String str = currentMessage.getText().toString();
+                    str = str.substring(0, str.length() - 1);
+                    currentMessage.setText(str);
+                }
+
+            } else if (primaryCode == 13) {
+                currentMessage.append("\n");
+
+            } else {
+                char c = (char) primaryCode;
+                //Log.i("key pressed: ", String.valueOf(c));
+                currentMessage.append(String.valueOf(c));
+            }
+        }
+
+        @Override public void onPress(int arg0) {
+        }
+
+        @Override public void onRelease(int primaryCode) {
+        }
+
+        @Override public void onText(CharSequence text) {
+        }
+
+        @Override public void swipeDown() {
+        }
+
+        @Override public void swipeLeft() {
+        }
+
+        @Override public void swipeRight() {
+        }
+
+        @Override public void swipeUp() {
+        }
+    };
 }
