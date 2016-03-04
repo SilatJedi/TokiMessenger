@@ -96,12 +96,12 @@ public class MainActivity extends AppCompatActivity {
             } else if (primaryCode == 13) {
                 currentMessage.append("\n");
 
-            }/* else if (primaryCode == 32) {
+            } else if (primaryCode == 32) {
 
-                String spaceSplit = "";
+                //String spaceSplit = "";
+                currentMessage.append(" ");
 
-
-            }*/ else {
+            }else {
                 char c = (char) primaryCode;
                 //Log.i("key pressed: ", String.valueOf(c));
                 currentMessage.append(String.valueOf(c));
