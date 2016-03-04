@@ -6,31 +6,40 @@ import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public Keyboard keyboard;
     public KeyboardView keyboardView;
     public EditText currentMessage;
-    public ArrayList<String> words;
+    public String[] tokiWords;
+    public String[] englishWords;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tokiWords = getResources().getStringArray(R.array.tokiWordList);
+        englishWords = getResources().getStringArray(R.array.englishWordList);
+
+        //Create Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Create the Keyboard
-        keyboard = new Keyboard(this,R.xml.latinKeyBoard);
+        keyboard = new Keyboard(this,R.xml.latin_key_board);
 
-        // Lookup the KeyboardView
+        // Create the KeyboardView
         keyboardView= (KeyboardView)findViewById(R.id.keyboardview);
 
         // Attach the keyboard to the view
@@ -41,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Install the key handler
         keyboardView.setOnKeyboardActionListener(onKeyboardActionListener);
-
-        words = new ArrayList<>();
 
         currentMessage = (EditText)findViewById(R.id.currentMessageEditText);
     }
