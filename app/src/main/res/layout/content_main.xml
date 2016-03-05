@@ -16,11 +16,15 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/currentMessageEditText"
         android:layout_centerHorizontal="true"
         android:textAlignment="textStart"
-        android:onClick="openKeyboard"/>
+        android:onClick="openKeyboard"
+        android:singleLine="false"
+        android:gravity="top"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:background="#00000000"/>
 
     <android.inputmethodservice.KeyboardView
         android:id="@+id/keyboardview"

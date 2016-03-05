@@ -6,12 +6,17 @@ import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     private KeyboardView.OnKeyboardActionListener onKeyboardActionListener = new KeyboardView.OnKeyboardActionListener() {
         @Override public void onKey(int primaryCode, int[] keyCodes)
         {
+            //backspace key
             if (primaryCode == -5) {
                 if ( String.valueOf(currentMessage.getText().toString()).length() == 0) {
                     currentMessage.setText("");
@@ -93,21 +99,26 @@ public class MainActivity extends AppCompatActivity {
                     String str = currentMessage.getText().toString();
                     str = str.substring(0, str.length() - 1);
                     currentMessage.setText(str);
+                    currentMessage.setSelection(str.length());
                 }
-
+            // enter key
             } else if (primaryCode == 13) {
                 currentMessage.append("\n");
 
+            //spacebar
             } else if (primaryCode == 32) {
 
                 //String spaceSplit = "";
                 currentMessage.append(" ");
 
+            //add character to currentMessage
             }else {
                 char c = (char) primaryCode;
                 //Log.i("key pressed: ", String.valueOf(c));
                 currentMessage.append(String.valueOf(c));
             }
+
+            spellCheck();
         }
 
         @Override public void onPress(int arg0) {
@@ -131,4 +142,18 @@ public class MainActivity extends AppCompatActivity {
         @Override public void swipeUp() {
         }
     };
+
+    public void spellCheck() {
+        ArrayList<String> badWords = new ArrayList<>();
+        String message = currentMessage.getText().toString();
+        ArrayList<String> wordsToCheck = new ArrayList<>(Arrays.asList(message.split(" ")));
+
+        for (int k = 0; k < wordsToCheck.size(); k++){
+            for (int i = 0; i < tokiWords.length; i++) {
+                if (wordsToCheck.get(k).equals(tokiWords[i])) {
+
+                }
+            }
+        }
+    }
 }
